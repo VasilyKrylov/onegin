@@ -1,0 +1,17 @@
+------------- STRAIGHT SORT -------------
+
+aaazz
+bbbyy
+cccww
+
+------------- REVERSED SORT -------------
+
+cccww
+bbbyy
+aaazz
+
+------------- ORIGINAL POEM -------------
+
+aaazz
+bbbyy
+cccww
