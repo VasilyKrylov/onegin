@@ -127,12 +127,12 @@ void PrintText (line *linesArray, const char *message)
 
     fputs (message, config.outputFile);
 
-    DEBUG ("linesArray: %p", linesArray);
+    DEBUG ("linesArray: %p", linesArray)
 
     for (size_t i = 0; linesArray[i].start != NULL; i++)
     {
-        DEBUG ("linesArray[%lu].start = %p", i, linesArray[i].start);
-        DEBUG ("linesArray[%lu].len = %lu", i, linesArray[i].len);
+        DEBUG ("linesArray[%lu].start = %p", i, linesArray[i].start)
+        DEBUG ("linesArray[%lu].len = %lu", i, linesArray[i].len)
 
         fprintf (config.outputFile, "%.*s", (int)linesArray[i].len, (linesArray[i].start));
     }

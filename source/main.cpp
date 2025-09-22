@@ -12,9 +12,9 @@
 
 extern struct config_t config;
 
-int main(int argc, char **argv)
+int main (int argc, char **argv)
 {
-    int setConfigRes = SetConfig(argc, argv);
+    int setConfigRes = SetConfig (argc, argv);
     if (setConfigRes != 0)
         return setConfigRes;
 
@@ -24,12 +24,13 @@ int main(int argc, char **argv)
         ERROR ("%s", "Empty input file or error while getting file size");
         return 1;
     }
-    PRINT ("fileSize: %lu\n", fileSize);
+    PRINT ("fileSize: %lu\n", fileSize)
 
     char *content = ReadFile (config.inputFile, fileSize);
     if (content == NULL)
     {
-        ERROR ("%s: %s", "error allocating memory for content", strerror (errno));
+        ERROR ("%s: %s", "Error allocating memory for content", strerror (errno));
+        
         return 1;
     }
 
@@ -39,7 +40,8 @@ int main(int argc, char **argv)
     line *linesArray = (line *) calloc (linesCount + 1, sizeof(line));
     if (linesArray == NULL)
     {
-        ERROR ("%s: %s", "error allocating memory for linesArray", strerror (errno));
+        ERROR ("%s: %s", "Error allocating memory for linesArray", strerror (errno));
+
         return 1;
     }
 
@@ -64,25 +66,25 @@ int main(int argc, char **argv)
     linesArrayOrig = (line *) memcpy (linesArrayOrig, linesArray, (linesCount + 1) * sizeof(line));
 
     // -------------------------------------------- DEBUG --------------------------------------------
-    PRINT ("%s", "\ncontent:\n");
+    PRINT ("%s", "\ncontent:\n")
     for (size_t i = 0; i < fileSize + 2; i++)
     {
-        PRINT ("[%lu] = \t %d, \t '%c'\n", i, content[i], content[i]);
+        PRINT ("[%lu] = \t %d, \t '%c'\n", i, content[i], content[i])
     }
 
-    PRINT ("%s", "\nlinesArray:\n");
+    PRINT ("%s", "\nlinesArray:\n")
     for (size_t i = 0; i < linesCount; i++)
     {
-        PRINT ("[%lu].len: %lu\n", i, linesArray[i].len);
-        PRINT ("[%lu].start: %p\n", i, linesArray[i].start);
-        PRINT ("[%lu] relative start: %ld\n", i, linesArray[i].start - linesArray[0].start);
+        PRINT ("[%lu].len: %lu\n", i, linesArray[i].len)
+        PRINT ("[%lu].start: %p\n", i, linesArray[i].start)
+        PRINT ("[%lu] relative start: %ld\n", i, linesArray[i].start - linesArray[0].start)
 
         PRINT ("[%lu]: ", i);
         for (size_t j = 0; j < linesArray[i].len; ++j)
         {
-            PRINT ("\t [%lu]: '%c'\n", j, *(linesArray[i].start + j));
+            PRINT ("\t [%lu]: '%c'\n", j, *(linesArray[i].start + j))
         }
-        PRINT ("%s", "\n");
+        PRINT ("%s", "\n")
     }
     // -----------------------------------------------------------------------------------------------
 
@@ -94,17 +96,17 @@ int main(int argc, char **argv)
         ERROR ("%s %s", "Error opening input file", strerror( errno));
     }
 
-    DEBUG ("%s", "PRINTING STRAIGHT SORTED POEM");
+    DEBUG ("%s", "PRINTING STRAIGHT SORTED POEM")
 
     PrintText (linesArray,      "------------- STRAIGHT SORT -------------\n\n");
 
     RhymeSort (linesArray, linesCount, sizeof(line));
 
-    DEBUG ("%s", "PRINTING REVERES SORTED POEM");
+    DEBUG ("%s", "PRINTING REVERES SORTED POEM")
 
     PrintText (linesArray,      "\n------------- REVERSED SORT -------------\n\n");
 
-    DEBUG ("%s", "PRINTING ORIGINAL POEM");
+    DEBUG ("%s", "PRINTING ORIGINAL POEM")
 
     PrintText (linesArrayOrig, "\n------------- ORIGINAL POEM -------------\n\n");
 

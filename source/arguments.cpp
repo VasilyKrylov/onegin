@@ -27,16 +27,16 @@ static char defaultOutput[] = "output.txt";
 
 static const char helpMessage[] = "Usage: program [OPTION] [FILE]\n"
                                   "\n"
-                                  "1) Read strings of input file (default is \"textonegin.txt\")\n"
+                                  "1) Read strings of input file (default is \"text_onegin.txt\")\n"
                                   "2) Sort them in alpabetic and rhyme order\n"
                                   "3) Print result to output file (default is \"output.txt\")\n"
                                   "\n"
-                                  "\t -h, --help              \t\t\t print this help message\n"
-                                  "\t -i, --input [FILE_NAME] \t\t\t specify input file (default is text_onegin.txt)\n"
-                                  "\t -o, --output [FILE_NAME] \t\t\t specify input file (default is output.txt)\n"
+                                  "\t -h, --help               \t print this help message\n"
+                                  "\t -i, --input [FILE_NAME]  \t specify input file (default is text_onegin.txt)\n"
+                                  "\t -o, --output [FILE_NAME] \t specify input file (default is output.txt)\n"
                                   "\n"
                                   "Exit status:\n"
-                                  "0 if OK,"
+                                  "0 if OK,\n"
                                   "1 if any error occur\n";
 
 int CheckArgs (int argc, char *argv[]);
@@ -101,11 +101,11 @@ int SetConfig (int argc, char *argv[])
     int c = '\0';
     int status = 0;
 
-    DEBUG ("inputFileName = %p", inputFileName);
+    DEBUG ("inputFileName = %p", inputFileName)
 
     while ((c = getopt_long (argc, argv, shortOptions, longOptions, NULL)) != -1) 
     {
-        DEBUG ("Option %c has value %s\n", c, optarg);   
+        DEBUG ("Option %c has value %s\n", c, optarg)
 
         if (c == -1)
             break;
@@ -121,7 +121,7 @@ int SetConfig (int argc, char *argv[])
                     goto exit;
                 }
                 inputFileName = strdup (optarg);
-                DEBUG ("inputFileName = %p", inputFileName);
+                DEBUG ("inputFileName = %p", inputFileName)
                 break;
             case 'o':
                 if (outputFileName != NULL)
@@ -144,10 +144,8 @@ int SetConfig (int argc, char *argv[])
                 config.debug = 1;
                 break;
             case '?':
-                ERROR ("Error in getopt_long(), returned %c : %s", c, strerror(errno));
                 status = 1;
-
-                goto exit;
+                goto exit; // leave after first incorrect argument
             default:
                 ERROR ("%s", "This should never happen i guess");
                 ERROR ("getopt_long returned: %d = '%c'", c, c);
@@ -175,7 +173,7 @@ exit:
 // {
 //     assert (config);
 
-//     DEBUG ("argc %d", argc);
+//     DEBUG ("argc %d", argc)
 
 //     if (argc <= 1)
 //     {
@@ -184,7 +182,7 @@ exit:
 
 //     for (int i = 0; i < argc; i++)
 //     {
-//         DEBUG ("argv[%d] = \"%s\"", i, argv[i]);
+//         DEBUG ("argv[%d] = \"%s\"", i, argv[i])
 
 //         if (strcmp (argv[i], "-h") == 0 || strcmp (argv[i], "--help") == 0)
 //         {

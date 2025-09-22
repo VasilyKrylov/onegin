@@ -100,7 +100,7 @@ void BubbleSortCmp (line *linesArray, size_t size, int (*Cmp)(const void *, cons
     assert (linesArray);
     assert (Cmp);
 
-    DEBUG ("size: %lu", size);
+    DEBUG ("size: %lu", size)
 
     bool swapped = false;
 
@@ -108,30 +108,30 @@ void BubbleSortCmp (line *linesArray, size_t size, int (*Cmp)(const void *, cons
     {
         swapped = false;
 
-        DEBUG ("i: %lu", i);
+        DEBUG ("i: %lu", i)
 
         for (size_t j = 1; j < size - i; j++)
         {
-            DEBUG ("\tj: %lu", j);
+            DEBUG ("\tj: %lu", j)
 
             int comparison = (*Cmp) ((void *)&linesArray[j - 1], (void *)&linesArray[j]);
 
             if (comparison > 0)
             {
-                DEBUG ("\t\tswapping elements [%lu], [%lu]", j - 1, j);
+                DEBUG ("\t\tswapping elements [%lu], [%lu]", j - 1, j)
 
                 LineSwap (&linesArray[j - 1], &linesArray[j]);
 
                 swapped = true;
             }
 
-            DEBUG ("\t\tCmp() returned %d for elements [%lu] [%lu]", comparison, j - 1, j);
+            DEBUG ("\t\tCmp() returned %d for elements [%lu] [%lu]", comparison, j - 1, j)
         }
 
         if (!swapped) break;
     }
 
-    PRINT("%s", "\n");
+    PRINT("%s", "\n")
 }
 
 
@@ -148,13 +148,13 @@ int RhymeCmp (const void *left, const void *right)
     char *str1 = l1->start + l1->len - 1;
     char *str2 = l2->start + l2->len - 1;
 
-    DEBUG ("l1 -> start is %p", l1 -> start);
-    DEBUG ("l2 -> start is %p", l2 -> start);
+    DEBUG ("l1 -> start is %p", l1 -> start)
+    DEBUG ("l2 -> start is %p", l2 -> start)
 
     while (1)
     {
-        DEBUG ("\t\toldVal1 is : '%c'", *(str1));
-        DEBUG ("\t\toldVal2 is : '%c'", *(str2));
+        DEBUG ("\t\toldVal1 is : '%c'", *(str1))
+        DEBUG ("\t\toldVal2 is : '%c'", *(str2))
 
         str1 = skipNotAlphabetReversed (l1 -> start, str1);
         str2 = skipNotAlphabetReversed (l2 -> start, str2);
@@ -162,11 +162,11 @@ int RhymeCmp (const void *left, const void *right)
         char val1 = (char)tolower (*str1);
         char val2 = (char)tolower (*str2);
 
-        DEBUG ("\t\tval1 is : '%c'", val1);
-        DEBUG ("\t\tval2 is : '%c'", val2);
+        DEBUG ("\t\tval1 is : '%c'", val1)
+        DEBUG ("\t\tval2 is : '%c'", val2)
 
-        DEBUG ("\t\trelative position: %ld", str1 - l1->start);
-        DEBUG ("\t\trelative position: %ld", str2 - l2->start);
+        DEBUG ("\t\trelative position: %ld", str1 - l1->start)
+        DEBUG ("\t\trelative position: %ld", str2 - l2->start)
 
         if (val1 > val2)
             return 1;
@@ -187,7 +187,7 @@ int RhymeCmp (const void *left, const void *right)
         assert (str2 >= l2 -> start);
     }
 
-    DEBUG (" return 0 for '%c' and '%c'", *(l1 -> start), *(l2 -> start));
+    DEBUG (" return 0 for '%c' and '%c'", *(l1 -> start), *(l2 -> start))
 
     return 0;
 }
