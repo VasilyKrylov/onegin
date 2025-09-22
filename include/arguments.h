@@ -3,10 +3,6 @@
 
 #include <stdio.h>
 
-struct config {
-    FILE *inputFile;
-    FILE *outputFile;
-
-};
+int SetConfig (int argc, char **argv);
 
 #endif // K_ARGUMENTS_H

@@ -6,10 +6,14 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
+#include "config.h"
 #include "onegin.h"
+#include "debug.h"
 #include "utils.h"
 
-size_t FileSize (FILE *file)
+extern config_t config;
+
+size_t GetFileSize (FILE *file)
 {
     assert (file != NULL);
 
@@ -29,13 +33,14 @@ size_t FileSize (FILE *file)
     return (size_t) fileSize;
 }
 
-// creat content buffer fileSize + 1
-// content[fileSize] = '\0'
+// creat content buffer fileSize + 2
+// content[fileSize] = '\n'
+// content[fileSize + 1] = '\0'
 char *ReadFile (FILE *file, size_t fileSize)
 {
     assert (file);
 
-    char *content = (char *) calloc (fileSize + 1, sizeof(char));
+    char *content = (char *) calloc (fileSize + 2, sizeof(char));
 
     if (content == NULL)
     {
@@ -50,12 +55,13 @@ char *ReadFile (FILE *file, size_t fileSize)
         ERROR ("fread() status code(how many bytes read) is: %lu", bytesRead);
         ERROR ("fileSize is: %lu", fileSize);
 
-        free(content);
+        free (content);
 
         return NULL;
     }
 
-    content[fileSize] = '\0';
+    content[fileSize] = '\n';
+    content[fileSize + 1] = '\0';
 
     return content;
 }
@@ -113,13 +119,13 @@ size_t MakePointers (char *content, line *linesArray)
     return curIdx + 1;
 }
 
-void PrintText (FILE *outputFile, line *linesArray, const char *message)
+void PrintText (line *linesArray, const char *message)
 {
-    assert (outputFile);
+    assert (config.outputFile);
     assert (linesArray);
     assert (message);
 
-    fputs (message, outputFile);
+    fputs (message, config.outputFile);
 
     DEBUG ("linesArray: %p", linesArray);
 
@@ -128,6 +134,6 @@ void PrintText (FILE *outputFile, line *linesArray, const char *message)
         DEBUG ("linesArray[%lu].start = %p", i, linesArray[i].start);
         DEBUG ("linesArray[%lu].len = %lu", i, linesArray[i].len);
 
-        fprintf (outputFile, "%.*s", (int)linesArray[i].len, (linesArray[i].start));
+        fprintf (config.outputFile, "%.*s", (int)linesArray[i].len, (linesArray[i].start));
     }
 }

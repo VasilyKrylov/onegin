@@ -5,37 +5,34 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "arguments.h"
+#include "debug.h"
 #include "onegin.h"
 #include "utils.h"
 
-// TODO:
-// command line arguments
-int main()
-{
-    char fileName[] = "textonegin.txt";
-    FILE *inputFile = fopen (fileName, "r");
-    if (inputFile == NULL)
-    {
-        ERROR ("%s %s", "Error opening input file", strerror (errno));
-    }
+extern struct config_t config;
 
-    // make FileSize and ReadFile inside one function and open file inside it
-    // rename FileSize to GetFileSize ?
-    size_t fileSize = FileSize (inputFile);
+int main(int argc, char **argv)
+{
+    int setConfigRes = SetConfig(argc, argv);
+    if (setConfigRes != 0)
+        return setConfigRes;
+
+    size_t fileSize = GetFileSize (config.inputFile);
     if (fileSize == 0)
     {
         ERROR ("%s", "Empty input file or error while getting file size");
     }
     PRINT ("fileSize: %lu\n", fileSize);
 
-    char *content = ReadFile (inputFile, fileSize);
+    char *content = ReadFile (config.inputFile, fileSize);
     if (content == NULL)
     {
         ERROR ("%s: %s", "error allocating memory for content", strerror (errno));
         return 1;
     }
 
-    size_t linesCount = CountLines (content, fileSize);
+    size_t linesCount = CountLines (content, fileSize + 1);
     PRINT ("Total number of lines: %lu\n", linesCount);
 
     line *linesArray = (line *) calloc (linesCount + 1, sizeof(line));
@@ -67,7 +64,7 @@ int main()
 
     // -------------------------------------------- DEBUG --------------------------------------------
     PRINT ("%s", "\ncontent:\n");
-    for (size_t i = 0; i < fileSize + 1; i++)
+    for (size_t i = 0; i < fileSize + 2; i++)
     {
         PRINT ("[%lu] = \t %d, \t '%c'\n", i, content[i], content[i]);
     }
@@ -98,23 +95,23 @@ int main()
 
     DEBUG ("%s", "PRINTING STRAIGHT SORTED POEM");
 
-    PrintText (outputFile, linesArray,      "------------- STRAIGHT SORT -------------\n\n");
+    PrintText (linesArray,      "------------- STRAIGHT SORT -------------\n\n");
 
     RhymeSort (linesArray, linesCount, sizeof(line));
 
     DEBUG ("%s", "PRINTING REVERES SORTED POEM");
 
-    PrintText (outputFile, linesArray,      "\n------------- REVERSED SORT -------------\n\n");
+    PrintText (linesArray,      "\n------------- REVERSED SORT -------------\n\n");
 
     DEBUG ("%s", "PRINTING ORIGINAL POEM");
 
-    PrintText (outputFile, linesArrayOrig, "\n------------- ORIGINAL POEM -------------\n\n");
+    PrintText (linesArrayOrig, "\n------------- ORIGINAL POEM -------------\n\n");
 
     free (content);
     free (linesArray);
     free (linesArrayOrig);
 
-    fclose (inputFile); // should I check and this return code?
+    fclose (config.inputFile); // should I check and this return code?
     fclose (outputFile);
 
     return 0;

@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "debug.h"
 #include "onegin.h"
 #include "utils.h"
 
@@ -81,7 +82,7 @@ int Cmp (const void *param1, const void *param2)
         if (val1 < val2)
             return -1;
 
-        if (val1 == '\n')
+        if (val1 == '\n') // use -> len
             break;
 
         str1++;
