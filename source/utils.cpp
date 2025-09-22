@@ -82,7 +82,10 @@ int Cmp (const void *param1, const void *param2)
         if (val1 < val2)
             return -1;
 
-        if (val1 == '\n') // use -> len
+        if (str1 == left->start + left->len)
+            break;
+
+        if (str2 == right->start + right->len)
             break;
 
         str1++;

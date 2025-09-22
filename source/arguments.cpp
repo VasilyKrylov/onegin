@@ -22,7 +22,7 @@ static struct option longOptions[] = {
 };
 static const char shortOptions[] = "i:o:hd";
 
-static char defaultInput[]  = "textonegin.txt";
+static char defaultInput[]  = "text_onegin.txt";
 static char defaultOutput[] = "output.txt";
 
 static const char helpMessage[] = "Usage: program [OPTION] [FILE]\n"
@@ -32,17 +32,17 @@ static const char helpMessage[] = "Usage: program [OPTION] [FILE]\n"
                                   "3) Print result to output file (default is \"output.txt\")\n"
                                   "\n"
                                   "\t -h, --help              \t\t\t print this help message\n"
-                                  "\t -i, --input [FILE_NAME] \t\t\t specify input file (default is textonegin.txt)\n"
+                                  "\t -i, --input [FILE_NAME] \t\t\t specify input file (default is text_onegin.txt)\n"
                                   "\t -o, --output [FILE_NAME] \t\t\t specify input file (default is output.txt)\n"
                                   "\n"
                                   "Exit status:\n"
                                   "0 if OK,"
                                   "1 if any error occur\n";
 
-int CheckArgs(int argc, char *argv[]);
-int InitializeFiles(char *inputFileName, char *outputFileName);
+int CheckArgs (int argc, char *argv[]);
+int InitializeFiles (char *inputFileName, char *outputFileName);
 
-int InitializeFiles(char *inputFileName, char *outputFileName)
+int InitializeFiles (char *inputFileName, char *outputFileName)
 {
     if (inputFileName == NULL)
     {
@@ -63,7 +63,6 @@ int InitializeFiles(char *inputFileName, char *outputFileName)
     }
 
     config.outputFile = fopen (outputFileName, "w");
-    DEBUG("config.outputFile = %p", config.outputFile);
     if (config.outputFile == NULL)
     {
         ERROR ("%s: %s", "Error opening output file", strerror (errno));
@@ -74,10 +73,10 @@ int InitializeFiles(char *inputFileName, char *outputFileName)
     return 0;
 }
 
-int CheckArgs(int argc, char *argv[])
+int CheckArgs (int argc, char *argv[])
 {
     if (optind < argc) {
-        printf ("Non-option ARGV-elements: ");
+        printf ("Not correct command line arguments");
 
         while (optind < argc)
         {
@@ -91,6 +90,7 @@ int CheckArgs(int argc, char *argv[])
     
     return 0;
 }
+
 // 0 ok
 // 1 some error
 int SetConfig (int argc, char *argv[])
@@ -101,11 +101,11 @@ int SetConfig (int argc, char *argv[])
     int c = '\0';
     int status = 0;
 
-    DEBUG("inputFileName = %p", inputFileName);
+    DEBUG ("inputFileName = %p", inputFileName);
 
     while ((c = getopt_long (argc, argv, shortOptions, longOptions, NULL)) != -1) 
     {
-        DEBUG("Option %c has value %s\n", c, optarg);   
+        DEBUG ("Option %c has value %s\n", c, optarg);   
 
         if (c == -1)
             break;
@@ -115,18 +115,18 @@ int SetConfig (int argc, char *argv[])
             case 'i':
                 if (inputFileName != NULL)
                 {
-                    printf("Multiple definitions of input file!");
+                    printf ("Multiple definitions of input file!");
                     status = 1;
 
                     goto exit;
                 }
                 inputFileName = strdup (optarg);
-                DEBUG("inputFileName = %p", inputFileName);
+                DEBUG ("inputFileName = %p", inputFileName);
                 break;
             case 'o':
                 if (outputFileName != NULL)
                 {
-                    printf("Multiple definitions of output file!");
+                    printf ("Multiple definitions of output file!");
                     status = 1;
 
                     goto exit;
@@ -144,7 +144,7 @@ int SetConfig (int argc, char *argv[])
                 config.debug = 1;
                 break;
             case '?':
-                ERROR("Error in getopt_long(), returned %c : %s", c, strerror(errno));
+                ERROR ("Error in getopt_long(), returned %c : %s", c, strerror(errno));
                 status = 1;
 
                 goto exit;

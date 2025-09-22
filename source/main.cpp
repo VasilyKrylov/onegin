@@ -22,6 +22,7 @@ int main(int argc, char **argv)
     if (fileSize == 0)
     {
         ERROR ("%s", "Empty input file or error while getting file size");
+        return 1;
     }
     PRINT ("fileSize: %lu\n", fileSize);
 
