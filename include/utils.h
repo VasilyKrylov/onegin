@@ -17,7 +17,7 @@
 void Swap (size_t *a, size_t *b);
 void LineSwap (line *a, line *b);
 
-int Cmp (const void *param1, const void *param2);
+int AlphabeticalCmp (const void *param1, const void *param2);
 
 void BubbleSortCmp (line *linesArray, size_t size, int (*Cmp)(const void *, const void *));
 void RhymeSort (line *linesPrts, size_t n, size_t size);

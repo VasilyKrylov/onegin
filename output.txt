@@ -2,11 +2,9 @@
 
 aaz
 bby
-ccw
 
 ------------- REVERSED SORT -------------
 
-ccw
 bby
 aaz
 
@@ -14,4 +12,3 @@ aaz
 
 bby
 aaz
-ccw

@@ -57,7 +57,7 @@ char *skipNotAlphabetReversed (char *startPtr, char *s)
     return s;
 }
 
-int Cmp (const void *param1, const void *param2)
+int AlphabeticalCmp (const void *param1, const void *param2)
 {
     assert (param1);
     assert (param2);
@@ -124,7 +124,7 @@ void BubbleSortCmp (line *linesArray, size_t size, int (*Cmp)(const void *, cons
                 swapped = true;
             }
 
-            DEBUG ("\t\tCmp() returned %d for elements [%lu] [%lu]", comparison, j - 1, j)
+            DEBUG ("\t\tBubbleSortCmp() returned %d for elements [%lu] [%lu]", comparison, j - 1, j)
         }
 
         if (!swapped) break;

@@ -13,7 +13,8 @@
 
 size_t GetFileSize (FILE *file)
 {
-    assert (file != NULL);
+    if (file == NULL)
+        return 0;
 
     int fseekRes = fseek (file, 0, SEEK_END);
     if (fseekRes != 0)
@@ -67,8 +68,8 @@ char *ReadFile (FILE *file, size_t fileSize)
     return content;
 }
 
-// counts \n
-size_t CountLines (char *content, size_t fileSize)
+// counts lines using lineSeparator
+size_t CountLines (char *content, size_t fileSize, char lineSeparator)
 {
     assert(content);
 
@@ -76,7 +77,7 @@ size_t CountLines (char *content, size_t fileSize)
 
     for (size_t i = 0; i < fileSize; i++)
     {
-        if (content[i] == '\n')
+        if (content[i] == lineSeparator)
         {
             lines++;
         }
@@ -87,7 +88,7 @@ size_t CountLines (char *content, size_t fileSize)
 
 // innitializing linesArray array
 // return number of initialized pointers
-size_t MakePointers (char *content, line *linesArray)
+size_t MakePointers (char *content, line *linesArray, char lineSeparator)
 {
     assert (content);
     assert (linesArray);
@@ -98,7 +99,7 @@ size_t MakePointers (char *content, line *linesArray)
 
     for (size_t i = 0; content[i] != '\0'; i++)
     {
-        if (content[i] == '\n')
+        if (content[i] == lineSeparator)
         {
             if (curIdx == 0)
             {
@@ -127,7 +128,7 @@ void PrintText (line *linesArray, const char *message)
     assert (linesArray);
     assert (message);
 
-    fputs (message, config.outputFile);
+    fprintf (config.outputFile, "%s", message);
 
     DEBUG ("linesArray: %p", linesArray)
 
@@ -138,4 +139,70 @@ void PrintText (line *linesArray, const char *message)
 
         fprintf (config.outputFile, "%.*s", (int)linesArray[i].len, (linesArray[i].start));
     }
+}
+
+void PrintTextOriginal (const char *content, const char *message)
+{
+    config_t config = GetConfig();
+    assert (config.outputFile);
+    assert (content);
+    assert (message);
+
+    fprintf (config.outputFile, "%s", message);
+
+    fprintf (config.outputFile, "%s", content);
+}
+
+int InputText (FILE *inputFile, char **contentPtr, line **linesArrayPtr, size_t *linesCountPtr)
+{
+    size_t ptrsMade = 0;
+
+    size_t fileSize = GetFileSize (inputFile);
+    if (fileSize == 0)
+    {
+        ERROR ("%s", "Empty input file or error while getting file size");
+
+        return 1;
+    }
+    PRINT ("fileSize: %lu\n", fileSize)
+
+    *contentPtr = ReadFile (inputFile, fileSize);
+    char *content = *contentPtr;
+    if (content == NULL)
+    {
+        ERROR ("%s: %s", "Error allocating memory for content", strerror (errno));
+
+        return 1;
+    }
+
+    const char lineSeparator = '\n';
+    *linesCountPtr = CountLines (content, fileSize + 1, lineSeparator);
+    size_t linesCount = *linesCountPtr;
+
+    PRINT ("Total number of lines: %lu\n", linesCount);
+
+    *linesArrayPtr = (line *) calloc (linesCount + 1, sizeof(line));
+    line *linesArray = *linesArrayPtr;
+
+    if (linesArray == NULL)
+    {
+        ERROR ("%s: %s", "Error allocating memory for linesArray", strerror (errno));
+
+        return 1;
+    }
+
+    ptrsMade = MakePointers (content, linesArray, lineSeparator);
+    if (ptrsMade - 1 != linesCount)
+    {
+        ERROR ("%s", "number of strings in file and number of initialized pointers doesn't match!");
+        ERROR ("%s", "One extra ptr in *linesArray for empty structure");
+        ERROR ("%s %lu", "linesCount: ", linesCount);
+        ERROR ("%s %lu", "ptrsMade: ", ptrsMade);
+
+        return 1;
+    }
+
+    DEBUG ("%s", "InputText() returns 0. Everything is good");
+
+    return 0;
 }
