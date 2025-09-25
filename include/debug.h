@@ -1,9 +1,7 @@
 #ifndef K_DEBUG_H
 #define K_DEBUG_H
 
-#include "config.h"
-
-extern config_t config;
+#include "arguments.h"
 
 #define RED_BOLD_COLOR "\33[1;31m"
 #define BLUE_BOLD_COLOR "\33[1;34m" // blue
@@ -13,7 +11,8 @@ extern config_t config;
 
 #ifdef PRINT_DEBUG
     #define DEBUG(format, ...)  { \
-                                    if (config.debug) \
+                                    config_t config_debug = GetConfig(); \
+                                    if (config_debug.debug) \
                                     { \
                                         fprintf(stderr, BLUE_BOLD_COLOR "[DEBUG] %s:%d:%s(): " format "\n" COLOR_END, \
                                                 __FILE__, __LINE__, __func__, __VA_ARGS__); \
@@ -21,7 +20,8 @@ extern config_t config;
                                 }
 
     #define PRINT(format, ...)  { \
-                                    if (config.debug) \
+                                    config_t config_debug = GetConfig(); \
+                                    if (config_debug.debug) \
                                     { \
                                         fprintf(stderr, BLUE_BOLD_COLOR format COLOR_END, __VA_ARGS__); \
                                     } \

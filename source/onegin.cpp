@@ -6,12 +6,10 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-#include "config.h"
+#include "arguments.h"
 #include "onegin.h"
 #include "debug.h"
 #include "utils.h"
-
-extern config_t config;
 
 size_t GetFileSize (FILE *file)
 {
@@ -38,7 +36,10 @@ size_t GetFileSize (FILE *file)
 // content[fileSize + 1] = '\0'
 char *ReadFile (FILE *file, size_t fileSize)
 {
-    assert (file);
+    if (file == NULL)
+    {
+        return NULL;
+    }
 
     char *content = (char *) calloc (fileSize + 2, sizeof(char));
 
@@ -121,6 +122,7 @@ size_t MakePointers (char *content, line *linesArray)
 
 void PrintText (line *linesArray, const char *message)
 {
+    config_t config = GetConfig();
     assert (config.outputFile);
     assert (linesArray);
     assert (message);

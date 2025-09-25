@@ -36,7 +36,7 @@ void LineSwap (line *a, line *b)
 // doesn't skip \n
 char *skipNotAlphabet (char *s)
 {
-    assert(s);
+    assert (s);
 
     while (!isalpha (*s) && *s != '\n' && *s != '\0')
     {
@@ -47,8 +47,8 @@ char *skipNotAlphabet (char *s)
 
 char *skipNotAlphabetReversed (char *startPtr, char *s)
 {
-    assert(startPtr);
-    assert(s);
+    assert (startPtr);
+    assert (s);
 
     while (!isalpha (*s) && s != startPtr)
     {
@@ -59,8 +59,8 @@ char *skipNotAlphabetReversed (char *startPtr, char *s)
 
 int Cmp (const void *param1, const void *param2)
 {
-    assert(param1);
-    assert(param2);
+    assert (param1);
+    assert (param2);
 
     const line *left  = (const line *)param1;
     const line *right = (const line *)param2;
@@ -102,12 +102,11 @@ void BubbleSortCmp (line *linesArray, size_t size, int (*Cmp)(const void *, cons
 
     DEBUG ("size: %lu", size)
 
-    bool swapped = false;
 
     for (size_t i = 0; linesArray[i].start != NULL; i++)
     {
-        swapped = false;
-
+        bool swapped = false;
+        
         DEBUG ("i: %lu", i)
 
         for (size_t j = 1; j < size - i; j++)
@@ -137,8 +136,8 @@ void BubbleSortCmp (line *linesArray, size_t size, int (*Cmp)(const void *, cons
 
 int RhymeCmp (const void *left, const void *right)
 {
-    assert(left);
-    assert(right);
+    assert (left);
+    assert (right);
 
     const line *l1 = (const line *)left;
     const line *l2 = (const line *)right;
@@ -194,7 +193,7 @@ int RhymeCmp (const void *left, const void *right)
 
 void RhymeSort (line *linesPrts, size_t n, size_t size)
 {
-    assert(linesPrts);
+    assert (linesPrts);
 
     qsort (linesPrts, n, size, RhymeCmp);
 }

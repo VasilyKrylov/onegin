@@ -7,11 +7,14 @@
 #include <unistd.h>
 
 #include "arguments.h"
-#include "config.h"
 #include "debug.h"
 #include "utils.h"
 
-extern config_t config;
+// it is static to not be modified outside SetConfig()
+// to get values, call GetConfig()
+struct config_t config = {.inputFile = NULL,
+                          .outputFile = NULL, 
+                          .debug = 0};
 
 static struct option longOptions[] = {
     {"input",   required_argument,  NULL,  'i'},
@@ -98,19 +101,16 @@ int SetConfig (int argc, char *argv[])
     char *inputFileName = NULL;
     char *outputFileName = NULL;
 
-    int c = '\0';
+    int currentFlag = '\0';
     int status = 0;
 
-    DEBUG ("inputFileName = %p", inputFileName)
+    DEBUG ("inputFileName = %p", inputFileName) // lol this doesn't work
 
-    while ((c = getopt_long (argc, argv, shortOptions, longOptions, NULL)) != -1) 
+    while ((currentFlag = getopt_long (argc, argv, shortOptions, longOptions, NULL)) != -1) 
     {
-        DEBUG ("Option %c has value %s\n", c, optarg)
+        DEBUG ("Option %c has value %s\n", currentFlag, optarg)
 
-        if (c == -1)
-            break;
-
-        switch (c) 
+        switch (currentFlag) 
         {
             case 'i':
                 if (inputFileName != NULL)
@@ -139,7 +139,7 @@ int SetConfig (int argc, char *argv[])
                 free (inputFileName);
                 free (outputFileName);
 
-                exit (0);
+                return 1;
             case 'd':
                 config.debug = 1;
                 break;
@@ -148,7 +148,7 @@ int SetConfig (int argc, char *argv[])
                 goto exit; // leave after first incorrect argument
             default:
                 ERROR ("%s", "This should never happen i guess");
-                ERROR ("getopt_long returned: %d = '%c'", c, c);
+                ERROR ("getopt_long returned: %d = '%c'", currentFlag, currentFlag);
 
                 status = 1;
                 goto exit;
@@ -167,6 +167,11 @@ exit:
     free (inputFileName);
     free (outputFileName);
     return status;
+}
+
+config_t GetConfig()
+{
+    return config;
 }
 
 // int SetConfig (config *config, int argc, char **argv)

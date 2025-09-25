@@ -10,18 +10,18 @@
 #include "onegin.h"
 #include "utils.h"
 
-extern struct config_t config;
-
 int main (int argc, char **argv)
 {
     int setConfigRes = SetConfig (argc, argv);
     if (setConfigRes != 0)
         return setConfigRes;
+    config_t config = GetConfig();
 
     size_t fileSize = GetFileSize (config.inputFile);
     if (fileSize == 0)
     {
         ERROR ("%s", "Empty input file or error while getting file size");
+        
         return 1;
     }
     PRINT ("fileSize: %lu\n", fileSize)
@@ -30,7 +30,7 @@ int main (int argc, char **argv)
     if (content == NULL)
     {
         ERROR ("%s: %s", "Error allocating memory for content", strerror (errno));
-        
+
         return 1;
     }
 
